@@ -9,6 +9,8 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.example.lapbot.ui.main.MainScreen
+import com.example.lapbot.ui.main.AnnouncementScreen
+import com.example.lapbot.ui.main.DriverScreen
 
 @Composable
 fun MainNavigation() {
@@ -20,7 +22,24 @@ fun MainNavigation() {
     entryProvider =
       entryProvider {
         entry<Main> {
-          MainScreen(onItemClick = { navKey -> backStack.add(navKey) }, modifier = Modifier.safeDrawingPadding().padding(16.dp))
+          MainScreen(
+            onDriverClick = { driverId -> backStack.add(Driver(driverId)) },
+            onAnnouncementsClick = { backStack.add(Announcer) },
+            modifier = Modifier.safeDrawingPadding().padding(12.dp),
+          )
+        }
+        entry<Driver> { key ->
+          DriverScreen(
+            driverId = key.driverId,
+            onBack = { backStack.removeLastOrNull() },
+            modifier = Modifier.safeDrawingPadding().padding(12.dp),
+          )
+        }
+        entry<Announcer> {
+          AnnouncementScreen(
+            onBack = { backStack.removeLastOrNull() },
+            modifier = Modifier.safeDrawingPadding().padding(12.dp),
+          )
         }
       },
   )

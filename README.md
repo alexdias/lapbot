@@ -2,6 +2,8 @@
 
 Native Android app starter built with Kotlin and Jetpack Compose.
 
+See [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) for the live timing, metrics, announcements, and connection behavior specification.
+
 ## Requirements
 
 - JDK 17

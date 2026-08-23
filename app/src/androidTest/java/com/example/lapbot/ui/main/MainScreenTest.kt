@@ -3,24 +3,36 @@ package com.example.lapbot.ui.main
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import com.example.lapbot.data.TimingUiState
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-/** UI tests for [com.example.lapbot.ui.main.MainScreen]. */
 class MainScreenTest {
-
   @get:Rule val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
   @Before
   fun setup() {
-    composeTestRule.setContent { MainScreen(FAKE_DATA) }
+    composeTestRule.setContent {
+      MainScreen(
+        state = TimingUiState(),
+        onConnect = {},
+        onDisconnect = {},
+        onAutoReconnectChange = {},
+        onTailLimitChange = {},
+        onReconnectPolicyChange = {},
+        onDriverClick = {},
+        onAnnouncementsClick = {},
+      )
+    }
   }
 
   @Test
-  fun firstItem_exists() {
-    FAKE_DATA.forEach { composeTestRule.onNodeWithText("Hello $it!").assertExists() }
+  fun disconnectedControlsAreShown() {
+    composeTestRule.onNodeWithText("Connect").assertExists()
+    composeTestRule.onNodeWithText("Auto-reconnect").assertExists()
+    composeTestRule.onNodeWithText("Announcer").assertExists()
+    composeTestRule.onNodeWithText("Current timing").assertExists()
+    composeTestRule.onNodeWithText("JSON stream tail").assertExists()
   }
 }
-
-private val FAKE_DATA = listOf("Sample1", "Sample2", "Sample3")

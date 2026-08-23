@@ -1,27 +1,36 @@
 package com.example.lapbot.ui.main
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.lapbot.data.DataRepository
-import com.example.lapbot.ui.main.MainScreenUiState.Success
-import kotlinx.coroutines.flow.SharingStarted
+import com.example.lapbot.data.TimingRepository
+import com.example.lapbot.data.TimingUiState
+import com.example.lapbot.data.ReconnectPolicy
+import com.example.lapbot.data.ToneSettings
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 
-class MainScreenViewModel(dataRepository: DataRepository) : ViewModel() {
-  val uiState: StateFlow<MainScreenUiState> =
-    dataRepository.data
-      .map<List<String>, MainScreenUiState>(::Success)
-      .catch { emit(MainScreenUiState.Error(it)) }
-      .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), MainScreenUiState.Loading)
-}
+class MainScreenViewModel(private val repository: TimingRepository) : ViewModel() {
+  val uiState: StateFlow<TimingUiState> = repository.state
 
-sealed interface MainScreenUiState {
-  object Loading : MainScreenUiState
+  fun connect() = repository.connect()
 
-  data class Error(val throwable: Throwable) : MainScreenUiState
+  fun disconnect() = repository.disconnect()
 
-  data class Success(val data: List<String>) : MainScreenUiState
+  fun setAutoReconnect(enabled: Boolean) = repository.setAutoReconnect(enabled)
+
+  fun setTailLimit(limit: Int) = repository.setTailLimit(limit)
+
+  fun setReconnectPolicy(policy: ReconnectPolicy) = repository.setReconnectPolicy(policy)
+
+  fun setSelectedKartNumber(kartNumber: String?) = repository.setSelectedKartNumber(kartNumber)
+
+  fun setMetricsSinceLap(lap: Int?) = repository.setMetricsSinceLap(lap)
+
+  fun setAudioAnnouncements(enabled: Boolean) = repository.setAudioAnnouncements(enabled)
+
+  fun setToneSettings(settings: ToneSettings) = repository.setToneSettings(settings)
+
+  fun playTestTones() = repository.playTestTones()
+
+  override fun onCleared() {
+    repository.close()
+  }
 }
