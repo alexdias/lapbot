@@ -1,0 +1,6 @@
+[submodule "android"]
+	path = android
+	url = file:///Users/alex/Projects/lapbot/.git/modules/android
+[submodule "ios"]
+	path = ios
+	url = file:///Users/alex/Projects/lapbot/.git/modules/ios
